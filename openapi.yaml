@@ -1,0 +1,121 @@
+openapi: 3.0.3
+info:
+  title: Notes API
+  description: An API for managing notes, including creating, retrieving, updating, and deleting notes.
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: Local server
+
+paths:
+  /notes/{noteName}:
+    get:
+      summary: Get a specific note
+      parameters:
+        - name: noteName
+          in: path
+          required: true
+          description: Name of the note to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Note retrieved successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: Note not found
+    put:
+      summary: Update a specific note
+      parameters:
+        - name: noteName
+          in: path
+          required: true
+          description: Name of the note to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          text/plain:
+            schema:
+              type: string
+              properties:
+                note:
+                  type: string
+      responses:
+        '200':
+          description: Note updated successfully
+        '404':
+          description: Note not found
+        '500':
+          description: Internal server error
+    delete:
+      summary: Delete a specific note
+      parameters:
+        - name: noteName
+          in: path
+          required: true
+          description: Name of the note to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Note deleted successfully
+        '404':
+          description: Note not found
+
+  /notes:
+    get:
+      summary: Get a list of all notes
+      responses:
+        '200':
+          description: List of notes retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    text:
+                      type: string
+        '404':
+          description: Directory not found
+
+  /write:
+    post:
+      summary: Create a new note
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                note_name:
+                  type: string
+                note:
+                  type: string
+      responses:
+        '201':
+          description: Note created successfully
+        '400':
+          description: Note already exists
+        '500':
+          description: Internal server error
+
+  /UploadForm.html:
+    get:
+      summary: Retrieve the upload form
+      responses:
+        '200':
+          description: HTML form retrieved successfully
+          content:
+            text/html:
+              schema:
+                type: string
